@@ -1,2 +1,5 @@
 deploy/octotech/app/
 deploy/octotech/octotech.zip
+.DS_Store
+.vscode/
+node_modules/

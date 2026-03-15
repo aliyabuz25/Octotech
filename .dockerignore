@@ -3,6 +3,8 @@
 .DS_Store
 .vscode
 .vscode/
+node_modules
+node_modules/
 deploy/octotech/app
 deploy/octotech/app/
 deploy/octotech/octotech.zip
