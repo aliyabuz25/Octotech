@@ -13,7 +13,6 @@ sudo unzip -o /datastore/octotech/octotech.zip -d /datastore/octotech/app
 ```
 
 Not: Stack `/datastore/octotech/app/nginx.conf` dosyasını bind etmez; Nginx config container açılışında otomatik oluşturulur (SPA fallback + asset path'leri için).
-
-Not 2: Stack açılışta `/datastore/octotech/app` içinden site dosyalarını container içine kopyalar. Eğer ZIP yanlışlıkla `app/` klasörü içinde açıldıysa, `/datastore/octotech/app/app/index.html` üzerinden de otomatik bulur.
+Not 2: Stack açılışta `/datastore/octotech/app` içinden site dosyalarını container içine kopyalar. `index.html` root'ta yoksa, `/datastore/octotech/app` altında (max depth 6) `index.html` arar (örn. `/datastore/octotech/app/app/index.html`).
 
 Alternatif stack dosyası: `deploy/octotech/stack.yml`.
