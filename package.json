@@ -2,6 +2,7 @@
   "name": "octotech-site",
   "private": true,
   "scripts": {
+    "start": "node server.js",
     "build:css": "tailwindcss -c tailwind.config.js -i assets/css/tailwind-input.css -o assets/css/tailwind.css --minify"
   },
   "devDependencies": {

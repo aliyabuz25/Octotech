@@ -553,14 +553,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const response = await fetch('/api/message', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'x-api-key': 'API-KEY-XXXX'
+                        'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({
-                        recipients: "+905464233871, +994 552545214",
-                        message: `OCTOTECH FORM:\nName: ${data.name}\nPhone: ${data.phone}\nEmail: ${data.email}\nMsg: ${data.message}`,
-                        label: "OctotechPortfolio"
-                    })
+                    body: JSON.stringify(data)
                 });
 
                 if (response.ok) {
