@@ -12,4 +12,6 @@ sudo cp deploy/octotech/octotech.zip /datastore/octotech/octotech.zip
 sudo unzip -o /datastore/octotech/octotech.zip -d /datastore/octotech/app
 ```
 
+Not: Stack artık `/datastore/octotech/app/nginx.conf` dosyasını container içine bind etmiyor (dosya/klasör tipi uyuşmazlığı Portainer deploy'unu bozabiliyor). `nginx:alpine` default config ile statik dosyalar servis edilir.
+
 Alternatif stack dosyası: `deploy/octotech/stack.yml`.

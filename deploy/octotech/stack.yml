@@ -5,7 +5,6 @@ services:
     volumes:
       - /datastore/octotech/nginx-logs:/app/nginx-logs
       - /datastore/octotech/app:/usr/share/nginx/html:ro
-      - /datastore/octotech/app/nginx.conf:/etc/nginx/nginx.conf:ro
     networks:
       - edge
     labels:
