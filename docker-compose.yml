@@ -4,9 +4,28 @@ services:
     restart: unless-stopped
     volumes:
       - /datastore/octotech/nginx-logs:/app/nginx-logs
-      - /datastore/octotech/app:/usr/share/nginx/html:ro
+      - /datastore/octotech/app:/src:ro
     networks:
       - edge
+    command:
+      - /bin/sh
+      - -lc
+      - |
+        set -e
+        if [ -f /src/nginx.conf ]; then
+          cp /src/nginx.conf /etc/nginx/nginx.conf
+        fi
+        rm -rf /usr/share/nginx/html/*
+        if [ -f /src/index.html ]; then
+          cp -a /src/. /usr/share/nginx/html/
+        elif [ -f /src/app/index.html ]; then
+          cp -a /src/app/. /usr/share/nginx/html/
+        else
+          echo "ERROR: index.html not found in /datastore/octotech/app (expected /src/index.html or /src/app/index.html)" >&2
+          ls -la /src >&2 || true
+          exit 1
+        fi
+        nginx -g 'daemon off;'
     labels:
       - 'traefik.enable=true'
       - 'traefik.docker.network=edge'
