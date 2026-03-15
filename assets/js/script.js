@@ -29,11 +29,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const gsapTo = (target, vars) =>
             new Promise((resolve) => {
+                if (!target) return resolve();
                 gsap.to(target, { ...vars, onComplete: resolve });
             });
 
         (async () => {
             if (navLogo) navLogo.style.opacity = '0';
+
+            if (!splashTitle) {
+                splashScreen.style.display = 'none';
+                if (navLogo) navLogo.style.opacity = '1';
+                document.body.style.overflow = '';
+                initSmoothScroll();
+                initThreeJS();
+                initAnimations();
+                return;
+            }
 
             await gsapTo(splashTitle, {
                 opacity: 1,
