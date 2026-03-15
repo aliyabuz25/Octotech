@@ -508,7 +508,7 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.disabled = true;
 
             try {
-                const response = await fetch('https://hubmsgpanel.octotech.az/api/message', {
+                const response = await fetch('/api/message', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
