@@ -14,45 +14,76 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 2. Splash Screen Logic
     const splashScreen = document.querySelector('#splash-screen');
-    const loaderBar = document.querySelector('#loader-bar');
-    const splashTitle = document.querySelector('#splash-screen h1');
+    const splashTitle = document.querySelector('#splash-logo');
+    const navLogo = document.querySelector('#nav-logo');
 
     if (splashScreen) {
         // Stop scroll during splash
         document.body.style.overflow = 'hidden';
 
-        const tl = gsap.timeline({
-            onComplete: () => {
-                splashScreen.style.display = 'none';
-                document.body.style.overflow = '';
-                initSmoothScroll();
-                initThreeJS();
-                initAnimations();
+        const waitForWindowLoad = () =>
+            new Promise((resolve) => {
+                if (document.readyState === 'complete') return resolve();
+                window.addEventListener('load', () => resolve(), { once: true });
+            });
+
+        const gsapTo = (target, vars) =>
+            new Promise((resolve) => {
+                gsap.to(target, { ...vars, onComplete: resolve });
+            });
+
+        (async () => {
+            if (navLogo) navLogo.style.opacity = '0';
+
+            await gsapTo(splashTitle, {
+                opacity: 1,
+                y: 0,
+                duration: 1.2,
+                ease: 'expo.out',
+                delay: 0.3,
+            });
+
+            await waitForWindowLoad();
+
+            if (navLogo && splashTitle) {
+                const fromRect = splashTitle.getBoundingClientRect();
+                const toRect = navLogo.getBoundingClientRect();
+
+                const fromCx = fromRect.left + fromRect.width / 2;
+                const fromCy = fromRect.top + fromRect.height / 2;
+                const toCx = toRect.left + toRect.width / 2;
+                const toCy = toRect.top + toRect.height / 2;
+
+                const dx = toCx - fromCx;
+                const dy = toCy - fromCy;
+                const scale = Math.min(
+                    toRect.width / Math.max(1, fromRect.width),
+                    toRect.height / Math.max(1, fromRect.height)
+                );
+
+                await gsapTo(splashTitle, {
+                    x: dx,
+                    y: dy,
+                    scale,
+                    duration: 1,
+                    ease: 'expo.inOut',
+                });
             }
-        });
 
-        // Stage 1: Reveal Title
-        tl.to(splashTitle, { 
-            opacity: 1, 
-            y: 0, 
-            duration: 1.5, 
-            ease: "expo.out",
-            delay: 0.5 
-        });
+            if (navLogo) navLogo.style.opacity = '1';
 
-        // Stage 2: Fill Loader
-        tl.to(loaderBar, { 
-            width: '100%', 
-            duration: 1.5, 
-            ease: "power4.inOut" 
-        }, "-=0.8");
+            await gsapTo(splashScreen, {
+                opacity: 0,
+                duration: 0.5,
+                ease: 'expo.inOut',
+            });
 
-        // Stage 3: Fade Out Splash
-        tl.to(splashScreen, { 
-            opacity: 0, 
-            duration: 1, 
-            ease: "expo.inOut" 
-        }, "+=0.2");
+            splashScreen.style.display = 'none';
+            document.body.style.overflow = '';
+            initSmoothScroll();
+            initThreeJS();
+            initAnimations();
+        })();
     } else {
         initSmoothScroll();
         initThreeJS();

@@ -69,18 +69,15 @@
 
     <!-- Minimalist Splash Screen -->
     <div id="splash-screen" class="fixed inset-0 z-[1000] bg-black flex flex-col items-center justify-center">
-        <div class="mb-4 overflow-hidden">
-            <h1 class="text-4xl font-bold tracking-[0.5em] animate-reveal-up opacity-0">OCTOTECH</h1>
-        </div>
-        <div class="w-40 h-[1px] bg-white/10 relative overflow-hidden">
-            <div id="loader-bar" class="absolute top-0 left-0 w-0 h-full bg-accent-primary transition-all duration-700 ease-out"></div>
+        <div class="overflow-hidden">
+            <h1 id="splash-logo" class="text-4xl font-bold tracking-[0.5em] animate-reveal-up opacity-0">OCTOTECH</h1>
         </div>
     </div>
 
     <canvas id="canvas3d" class="fixed top-0 left-0 w-full h-full -z-10 outline-none"></canvas>
 
     <nav class="fixed top-0 w-full z-[100] py-6 px-6 md:px-12 flex justify-between items-center transition-all" id="main-nav">
-        <div class="text-2xl font-bold tracking-tighter font-heading">
+        <div id="nav-logo" class="text-2xl font-bold tracking-tighter font-heading opacity-0">
             OCTO<span class="text-accent-primary">TECH</span>
         </div>
         <div class="hidden md:flex items-center space-x-12 text-xs uppercase tracking-[0.3em] font-bold text-slate-400">
