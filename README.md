@@ -4,7 +4,9 @@
 
 - Portainer Stack: `docker-compose.yml` (Traefik external network: `edge`, entrypoint: `web`)
 - Cloudflared Public Hostnames target: `http://127.0.0.1:8080` (Traefik)
-- Stack `octotech-frontend:latest` image'ını kullanır; image'ı host'ta build edin:
+- `octotech-frontend:latest` image Portainer tarafından stack deploy sırasında `build` ile oluşturulur (pull gerekmez).
+
+Host'ta manuel build gerekiyorsa:
 
 ```bash
 sudo mkdir -p /datastore/octotech/{app,nginx-logs}

@@ -1,6 +1,9 @@
 services:
   octotech-frontend:
     image: octotech-frontend:latest
+    build:
+      context: .
+      dockerfile: deploy/octotech/Dockerfile.frontend
     restart: unless-stopped
     volumes:
       - /datastore/octotech/nginx-logs:/app/nginx-logs

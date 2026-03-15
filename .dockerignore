@@ -1,0 +1,12 @@
+.git
+.git/
+.DS_Store
+.vscode
+.vscode/
+deploy/octotech/app
+deploy/octotech/app/
+deploy/octotech/octotech.zip
+deploy/octotech/octotech.zip/
+__MACOSX
+__MACOSX/
+._*
