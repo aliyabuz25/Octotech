@@ -1,12 +1,11 @@
 services:
   octotech-frontend:
-    image: octotech-frontend:latest
-    build:
-      context: .
-      dockerfile: deploy/octotech/Dockerfile.frontend
+    image: nginx:alpine
     restart: unless-stopped
     volumes:
       - /datastore/octotech/nginx-logs:/app/nginx-logs
+      - /datastore/octotech/app:/usr/share/nginx/html:ro
+      - /datastore/octotech/app/nginx.conf:/etc/nginx/nginx.conf:ro
     networks:
       - edge
     labels:
