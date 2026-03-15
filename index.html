@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="az" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Octotech | Gələcəyin Rəqəmsal Arxitekturası</title>
+    <meta name="description" content="Octotech - Süni intellekt, mürəkkəb proqram təminatı və qabaqcıl rəqəmsal həllər üzrə ixtisaslaşmış texnologiya mərkəzi.">
+    <meta name="keywords" content="proqramlaşdırma, süni intellekt, mobil tətbiq, veb dizayn, rəqəmsal transformasiya, Octotech Azerbaijan">
+    <meta property="og:title" content="Octotech | Gələcəyin Sistemləri">
+    <meta property="og:description" content="Biz mürəkkəbliyi sadəliyə, xəyalları isə koda çeviririk.">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#000000">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        accent: {
+                            primary: '#00f2ff', // Electric Cyan
+                            secondary: '#7000ff', // Cyber Purple
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="selection:bg-accent-primary selection:text-white">
+
+    <!-- Minimalist Splash Screen -->
+    <div id="splash-screen" class="fixed inset-0 z-[1000] bg-black flex flex-col items-center justify-center">
+        <div class="mb-4 overflow-hidden">
+            <h1 class="text-4xl font-bold tracking-[0.5em] animate-reveal-up opacity-0">OCTOTECH</h1>
+        </div>
+        <div class="w-40 h-[1px] bg-white/10 relative overflow-hidden">
+            <div id="loader-bar" class="absolute top-0 left-0 w-0 h-full bg-accent-primary transition-all duration-700 ease-out"></div>
+        </div>
+    </div>
+
+    <canvas id="canvas3d" class="fixed top-0 left-0 w-full h-full -z-10 outline-none"></canvas>
+
+    <nav class="fixed top-0 w-full z-[100] py-6 px-6 md:px-12 flex justify-between items-center transition-all" id="main-nav">
+        <div class="text-2xl font-bold tracking-tighter font-heading">
+            OCTO<span class="text-accent-primary">TECH</span>
+        </div>
+        <div class="hidden md:flex items-center space-x-12 text-xs uppercase tracking-[0.3em] font-bold text-slate-400">
+            <a href="#services" class="hover:text-white transition-colors" data-i18n="nav_services">Xidmətlər</a>
+            <a href="#ecosystem" class="hover:text-white transition-colors" data-i18n="nav_ecosystem">Ekosistem</a>
+            <button onclick="openContactModal()" class="hover:text-white transition-colors" data-i18n="nav_contact">Əlaqə</button>
+            
+            <!-- Language Selector Trigger -->
+            <div class="ml-4">
+                <button onclick="toggleLanguageMenu()" class="btn border-0 text-slate-400 hover:text-white px-8 uppercase flex items-center gap-3 transition-all duration-300 border-l border-white/10" type="button">
+                    <img id="current-flag-img" src="https://hatscripts.github.io/circle-flags/flags/az.svg" class="w-5 h-5 rounded-full object-cover">
+                    <span id="current-lang">AZ</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <header class="relative min-h-[120vh] flex flex-col items-center justify-center overflow-hidden">
+        <div id="hero-background" class="absolute inset-0 z-0">
+            <video 
+                autoplay 
+                muted 
+                loop 
+                playsinline 
+                class="w-full h-full object-cover opacity-40 grayscale-[0.2] contrast-125">
+                <source src="assets/video/octo.mp4" type="video/mp4">
+            </video>
+            <div class="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black opacity-80"></div>
+        </div>
+        <div class="container mx-auto px-6 text-center z-10 sticky top-[30vh]">
+            <h1 id="hero-title" class="text-7xl md:text-[10rem] font-bold tracking-tighter mb-4 leading-none lowercase">
+                octo<span class="text-accent-primary">tech<span id="magic-dot" class="inline-block translate-y-[-0.1em]">.</span></span>
+            </h1>
+            <p id="hero-desc" class="text-xs md:text-sm uppercase tracking-[0.6em] text-slate-500 max-w-xl mx-auto leading-relaxed opacity-0" data-i18n="hero_desc">
+                Süni intellekt və qabaqcıl mühəndislik
+            </p>
+        </div>
+    </header>
+
+    <!-- Brand Story Section -->
+    <section id="story" class="py-40 relative">
+        <div class="section-marker" data-i18n="story_marker">Hekayəmiz</div>
+        <div class="container mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-24 items-center">
+                <div class="reveal">
+                    <h2 class="text-5xl md:text-7xl font-bold mb-10 tracking-tighter" data-i18n="story_title">İnnovasiya Yalnız <span class="text-accent-primary">Başlanğıcdır</span></h2>
+                    <p class="text-slate-400 text-lg font-light leading-relaxed mb-8" data-i18n="story_desc">
+                        Octotech, rəqəmsal dünyada sadəcə iştirak etmək deyil, onu yenidən formalaşdırmaq üçün yaradılıb. Biz Forsaj-ın sürətini, Azfin-in maliyyə dəqiqliyini və Intersertservis-in etibarını bir araya gətirərək vahid bir ekosistem yaratdıq.
+                    </p>
+                    <p class="text-slate-500 font-light italic border-l-2 border-accent-primary pl-6 mb-12" data-i18n="story_quote">
+                        "Bizim üçün hər bir sətir kod, gələcəyə atılan strateji bir addımdır."
+                    </p>
+                    <div class="flex flex-wrap gap-8 opacity-40 grayscale group-hover:grayscale-0 transition-all duration-700">
+                        <span class="text-xl font-bold tracking-widest uppercase">Forsaj</span>
+                        <span class="text-xl font-bold tracking-widest uppercase">Intersertservis</span>
+                        <span class="text-xl font-bold tracking-widest uppercase">Azfin</span>
+                        <span class="text-xl font-bold tracking-widest uppercase">AuditTV</span>
+                        <span class="text-xl font-bold tracking-widest uppercase">Hubmsg</span>
+                    </div>
+                </div>
+                <div class="reveal relative">
+                    <div class="aspect-square bg-gradient-to-br from-accent-primary/20 to-transparent rounded-[3rem] overflow-hidden border border-white/5 flex items-center justify-center p-20">
+                        <div class="text-center">
+                            <div class="text-8xl font-bold mb-4">5+</div>
+                            <div class="text-xs uppercase tracking-[0.4em] text-slate-500" data-i18n="story_stats">Strateji Partnyorluq</div>
+                        </div>
+                    </div>
+                    <!-- Decorative Elements -->
+                    <div class="absolute -top-10 -right-10 w-40 h-40 bg-accent-primary/20 blur-[100px] rounded-full"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="h-[100vh] flex items-center justify-center pointer-events-none">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="reveal-text text-5xl md:text-8xl font-bold tracking-tighter leading-tight" data-reveal-text data-i18n="mid_reveal_1">
+                Mürəkkəbliyi Sadəliyə Çeviririk.
+            </h2>
+        </div>
+    </section>
+
+    <!-- Cinematic Video Scrub Section -->
+    <section id="video-scrub-section" class="relative h-[300vh] scrub-container">
+        <div class="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
+            <div class="video-container relative w-full h-full scale-110">
+                <video 
+                    id="scroll-video"
+                    muted 
+                    playsinline 
+                    preload="auto" 
+                    class="w-full h-full object-cover opacity-60 scrub-video"
+                    src="assets/video/vps.mp4">
+                </video>
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black pointer-events-none"></div>
+            </div>
+            
+            <div class="absolute inset-0 flex items-center justify-center z-10 transition-text opacity-0 translate-y-10">
+                <div class="text-center">
+                    <h3 class="text-4xl md:text-6xl font-bold tracking-tighter" data-i18n="mid_reveal_2">
+                        Sərhədsiz <span class="text-accent-primary">Müasirlik</span>
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Horizontal Section -->
+    <section id="services" class="relative py-40 border-t border-white/5 overflow-hidden">
+        <div class="section-marker" data-i18n="nav_services">Xidmətlər</div>
+        <div class="container mx-auto px-6 mb-24 text-center">
+            <h2 class="text-4xl md:text-6xl font-bold mb-8" data-i18n="services_title">Xidmətlərimizi Kəşf Edin</h2>
+            <p class="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto font-light leading-relaxed" data-i18n="services_desc_long">
+                Böyük bir komanda, qlobal bir baxış! 50 növ xidmət ilə biznesinizin bütün rəqəmsal ehtiyaclarını bir mərkəzdə toplayırıq.
+            </p>
+        </div>
+
+        <div class="services-wrapper flex gap-8 px-12 md:px-24 mb-12 cursor-grab active:cursor-grabbing overflow-x-auto no-scrollbar pb-12">
+            <!-- UI & UX -->
+            <div class="service-card min-w-[320px] md:min-w-[400px] aspect-[4/5] glass rounded-[2.5rem] p-12 flex flex-col justify-between group hover:border-accent-primary/50 transition-all duration-700">
+                <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center text-accent-primary group-hover:bg-accent-primary group-hover:text-white transition-all">
+                    <i data-lucide="layers" class="w-8 h-8"></i>
+                </div>
+                <div>
+                    <h3 class="text-3xl font-bold mb-4" data-i18n="service_ui_title">UI & UX Dizayn</h3>
+                    <p class="text-slate-500 font-light leading-relaxed group-hover:text-slate-300 transition-colors" data-i18n="service_ui_desc">İstifadəçi təcrübəsini mərkəzə alaraq estetik və funksional interfeyslər hazırlayırıq.</p>
+                </div>
+            </div>
+
+            <!-- Web Tasarım -->
+            <div class="service-card min-w-[320px] md:min-w-[400px] aspect-[4/5] glass rounded-[2.5rem] p-12 flex flex-col justify-between group hover:border-accent-primary/50 transition-all duration-700">
+                <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center text-accent-primary group-hover:bg-accent-primary group-hover:text-white transition-all">
+                    <i data-lucide="framer" class="w-8 h-8"></i>
+                </div>
+                <div>
+                    <h3 class="text-3xl font-bold mb-4" data-i18n="service_web_title">Veb Dizayn</h3>
+                    <p class="text-slate-500 font-light leading-relaxed group-hover:text-slate-300 transition-colors" data-i18n="service_web_desc">Brendinizin rəqəmsal simasını modern və təsirli bir görkəmə gətiririk.</p>
+                </div>
+            </div>
+
+            <!-- Web Proqramlaşdırma -->
+            <div class="service-card min-w-[320px] md:min-w-[400px] aspect-[4/5] glass rounded-[2.5rem] p-12 flex flex-col justify-between group hover:border-accent-primary/50 transition-all duration-700 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-1/2 h-1/2 bg-accent-primary/10 rounded-bl-[10rem] group-hover:bg-accent-primary/20 transition-all"></div>
+                <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center text-accent-primary group-hover:bg-accent-primary group-hover:text-white transition-all relative z-10">
+                    <i data-lucide="code-2" class="w-8 h-8"></i>
+                </div>
+                <div>
+                    <h3 class="text-3xl font-bold mb-4" data-i18n="service_prog_title">Veb Proqramlaşdırma</h3>
+                    <p class="text-slate-500 font-light leading-relaxed group-hover:text-slate-300 transition-colors" data-i18n="service_prog_desc">Güclü və təhlükəsiz veb sistemləri ilə rəqəmsal transformasiyanızı təmin edirik.</p>
+                </div>
+            </div>
+
+            <!-- E-Ticarət -->
+            <div class="service-card min-w-[320px] md:min-w-[400px] aspect-[4/5] glass rounded-[2.5rem] p-12 flex flex-col justify-between group hover:border-accent-primary/50 transition-all duration-700">
+                <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center text-accent-primary group-hover:bg-accent-primary group-hover:text-white transition-all">
+                    <i data-lucide="shopping-bag" class="w-8 h-8"></i>
+                </div>
+                <div>
+                    <h3 class="text-3xl font-bold mb-4" data-i18n="service_ecomm_title">E-Ticarət</h3>
+                    <p class="text-slate-500 font-light leading-relaxed group-hover:text-slate-300 transition-colors" data-i18n="service_ecomm_desc">Satış yönümlü və yüksək performanslı e-ticarət həlləri təqdim edirik.</p>
+                </div>
+            </div>
+
+            <!-- Mobil Tətbiqlər -->
+            <div class="service-card min-w-[320px] md:min-w-[400px] aspect-[4/5] glass rounded-[2.5rem] p-12 flex flex-col justify-between group hover:border-accent-primary/50 transition-all duration-700">
+                <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center text-accent-primary group-hover:bg-accent-primary group-hover:text-white transition-all">
+                    <i data-lucide="smartphone" class="w-8 h-8"></i>
+                </div>
+                <div>
+                    <h3 class="text-3xl font-bold mb-4" data-i18n="service_mobile_title">Mobil Tətbiqlər</h3>
+                    <p class="text-slate-500 font-light leading-relaxed group-hover:text-slate-300 transition-colors" data-i18n="service_mobile_desc">iOS və Android platformaları üçün innovativ və sürətli mobil həllər yaradırıq.</p>
+                </div>
+            </div>
+
+            <!-- Brend Kimliyi -->
+            <div class="service-card min-w-[320px] md:min-w-[400px] aspect-[4/5] glass rounded-[2.5rem] p-12 flex flex-col justify-between group hover:border-accent-primary/50 transition-all duration-700">
+                <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center text-accent-primary group-hover:bg-accent-primary group-hover:text-white transition-all">
+                    <i data-lucide="pen-tool" class="w-8 h-8"></i>
+                </div>
+                <div>
+                    <h3 class="text-3xl font-bold mb-4" data-i18n="service_brand_title">Brend Kimliyi</h3>
+                    <p class="text-slate-500 font-light leading-relaxed group-hover:text-slate-300 transition-colors" data-i18n="service_brand_desc">Markanızın ruhunu əks etdirən unikal loqo və vizual kimlik dizaynları.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom Progress Bar -->
+        <div class="container mx-auto px-6 mt-8">
+            <div class="w-full max-w-sm mx-auto h-[2px] bg-white/10 relative">
+                <div id="service-progress" class="absolute top-0 left-0 w-1/4 h-full bg-accent-primary"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="solutions" class="py-40 relative border-t border-white/5">
+        <div class="section-marker" data-i18n="solutions_marker">Həllər</div>
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-24 items-center">
+                <div class="reveal">
+                    <h2 class="text-4xl md:text-6xl font-bold mb-8 leading-tight" data-i18n="solutions_title">Rəqəmsal təkamülü <br> <span class="text-accent-primary">sürətləndirin.</span></h2>
+                    <p class="text-slate-400 text-lg leading-relaxed mb-12 font-light" data-i18n="solutions_desc">
+                        Mürəkkəb texnoloji prosesləri anlaşılan və miqyaslana bilən sistemlərə çeviririk. Hər mərhələdə yüksək performans və kibertəhlükəsizliyə diqqət yetiririk.
+                    </p>
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-2 h-2 bg-accent-primary rounded-full"></div>
+                            <span class="text-sm font-medium uppercase tracking-widest text-slate-300" data-i18n="solutions_item_1">Dərin Məlumat Analitikası</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-2 h-2 bg-accent-primary rounded-full"></div>
+                            <span class="text-sm font-medium uppercase tracking-widest text-slate-300" data-i18n="solutions_item_2">Blokçeyn Texnologiyaları</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-2 h-2 bg-accent-primary rounded-full"></div>
+                            <span class="text-sm font-medium uppercase tracking-widest text-slate-300" data-i18n="solutions_item_3">Kibertəhlükəsizlik Protokolları</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="reveal flex flex-col items-end">
+                    <div class="text-[10rem] font-bold text-accent-primary tracking-tighter leading-none">99.9%</div>
+                    <div class="text-sm uppercase tracking-[0.5em] text-slate-500 mt-4" data-i18n="solutions_stats">Sistem Stabilliyi</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="h-[100vh] flex items-center justify-center pointer-events-none">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="reveal-text text-5xl md:text-8xl font-bold tracking-tighter leading-tight" data-reveal-text data-i18n="hero_heading_5">
+                Gələcəyi Bu Gündən Dizayn Edirik.
+            </h2>
+        </div>
+    </section>
+
+    <section id="ecosystem" class="py-40 relative border-t border-white/5">
+        <div class="section-marker" data-i18n="ecosystem_marker">Ekosistem</div>
+        <div class="container mx-auto px-6">
+            <div class="max-w-3xl mb-32">
+                <h2 class="text-5xl md:text-8xl font-bold mb-10 tracking-tighter" data-i18n="ecosystem_title">Vahid <span class="text-accent-primary">Ekosistem.</span></h2>
+                <p class="text-slate-500 text-2xl font-light leading-relaxed" data-i18n="ecosystem_desc">Texnologiyanın hər bir dikeyində mükəmməlliyi hədəfləyən daxili markalarımız.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-24">
+                <div class="reveal">
+                    <div class="mb-6 text-accent-primary"><i data-lucide="cloud" class="w-10 h-10"></i></div>
+                    <h3 class="text-3xl font-bold mb-6" data-i18n="ecosystem_octocloud_title">OctoCloud</h3>
+                    <p class="text-slate-400 font-light leading-relaxed mb-8" data-i18n="ecosystem_octocloud_desc">Serverless infrastruktur ilə xərclərin 60% azaldılması və maksimum genişlənmə imkanı.</p>
+                    <div class="w-10 h-[1px] bg-accent-primary/50"></div>
+                </div>
+
+                <div class="reveal">
+                    <div class="mb-6 text-accent-primary"><i data-lucide="shield-check" class="w-10 h-10"></i></div>
+                    <h3 class="text-3xl font-bold mb-6" data-i18n="ecosystem_securegate_title">SecureGate</h3>
+                    <p class="text-slate-400 font-light leading-relaxed mb-8" data-i18n="ecosystem_securegate_desc">Gələcəyin kibertəhdidlərinə qarşı Quantum-proof şifrələmə və tam təhlükəsizlik.</p>
+                    <div class="w-10 h-[1px] bg-accent-primary/50"></div>
+                </div>
+
+                <div class="reveal">
+                    <div class="mb-6 text-accent-primary"><i data-lucide="brain-circuit" class="w-10 h-10"></i></div>
+                    <h3 class="text-3xl font-bold mb-6" data-i18n="ecosystem_insightai_title">InsightAI</h3>
+                    <p class="text-slate-400 font-light leading-relaxed mb-8" data-i18n="ecosystem_insightai_desc">Böyük məlumatların analizi ilə strateji qərarların verilməsini sürətləndirən süni intellekt.</p>
+                    <div class="w-10 h-[1px] bg-accent-primary/50"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cinematic Video Scrub Section 2 -->
+    <section id="video-scrub-2" class="relative h-[300vh] scrub-container">
+        <div class="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
+            <div class="video-container relative w-full h-full scale-110">
+                <video 
+                    muted playsinline preload="auto" 
+                    class="w-full h-full object-cover opacity-50 scrub-video"
+                    src="assets/video/hacker.mp4">
+                </video>
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black pointer-events-none"></div>
+            </div>
+            <div class="absolute inset-0 flex items-center justify-center z-10 transition-text opacity-0 translate-y-10">
+                <h3 class="text-4xl md:text-7xl font-bold tracking-tighter text-center px-6" data-i18n="hero_heading_6">
+                    Məlumat <span class="text-accent-primary">Təhlükəsizliyi</span>
+                </h3>
+            </div>
+        </div>
+    </section>
+
+    <section id="vision" class="py-40 relative overflow-hidden text-center bg-black">
+        <div class="container mx-auto px-6 max-w-5xl relative z-10">
+            <div class="reveal">
+                <div class="inline-block px-4 py-1 glass rounded-full text-[10px] uppercase tracking-[0.2em] mb-12 text-accent-primary font-bold" data-i18n="vision_marker">Bizim Vizyonumuz</div>
+                <h2 class="text-6xl md:text-[8rem] font-bold mb-16 leading-none tracking-tighter" data-i18n="vision_title">Qeyri-mümkünü <br> <span class="text-accent-primary">kodlayırıq.</span></h2>
+                <p class="text-slate-400 text-xl md:text-2xl font-light leading-relaxed mb-24 max-w-3xl mx-auto" data-i18n="vision_desc">
+                    Texnologiya bizim üçün sadəcə alət deyil, daha yaxşı bir dünya qurmağın bünövrəsidir. Sərhədləri zorlayan mühəndislik həllərimizlə gələcəyi bu gündən dizayn edirik.
+                </p>
+                
+                <div class="grid grid-cols-2 gap-20 border-t border-white/5 pt-20">
+                    <div class="reveal">
+                        <div class="text-[5rem] font-bold mb-2 tracking-tighter">12+</div>
+                        <div class="text-xs uppercase tracking-[0.5em] text-slate-500" data-i18n="vision_experience_desc">İllik Təcrübə</div>
+                    </div>
+                    <div class="reveal">
+                        <div class="text-[5rem] font-bold mb-2 tracking-tighter">250+</div>
+                        <div class="text-xs uppercase tracking-[0.5em] text-slate-500" data-i18n="vision_projects_desc">Qlobal Layihə</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Subtle noise glow -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[500px] bg-accent-primary/5 blur-[150px] pointer-events-none"></div>
+    </section>
+
+    <!-- Cinematic Video Scrub Section 3 -->
+    <section id="video-scrub-3" class="relative h-[300vh] scrub-container">
+        <div class="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
+            <div class="video-container relative w-full h-full scale-110">
+                <video 
+                    muted playsinline preload="auto" 
+                    class="w-full h-full object-cover opacity-40 scrub-video"
+                    src="https://cdn.pentayazilim.com/assets/image/animation/3/video.webm">
+                </video>
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black pointer-events-none"></div>
+            </div>
+            <div class="absolute inset-0 flex items-center justify-center z-10 transition-text opacity-0 translate-y-10">
+                <h3 class="text-4xl md:text-7xl font-bold tracking-tighter text-center px-6" data-i18n="hero_heading_7">
+                    Rəqəmsal <span class="text-accent-primary">İrs</span>
+                </h3>
+            </div>
+        </div>
+    </section>
+
+    <section id="brand-story" class="py-40 bg-black border-t border-white/5">
+        <div class="section-marker" data-i18n="brandstory_marker">Fəlsəfəmiz</div>
+        <div class="container mx-auto px-6 text-center relative z-10 reveal">
+            <h2 class="text-5xl md:text-7xl font-bold mb-12 leading-tight tracking-tighter" data-i18n="brandstory_title">
+                Hər layihə, yeni bir <span class="text-accent-primary">standartdır.</span>
+            </h2>
+            <p class="text-slate-400 text-xl md:text-2xl max-w-3xl mx-auto mb-20 leading-relaxed font-light" data-i18n="brandstory_desc">
+                Octotech-də bəsit təqlidlərdən qaçırıq. Hər bir sətir kod, brendinizin unikal rəqəmsal imzası olaraq dizayn edilir. Biz sadəcə proqram təminatı deyil, gələcəyin rəqəmsal irsini yaradırıq.
+            </p>
+            
+            <div class="flex flex-col items-center gap-10">
+                <button onclick="openContactModal()" class="btn-sketch" data-i18n="brandstory_button">
+                    Bizimlə Başlayın
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section id="references" class="py-40 relative border-t border-white/5">
+        <div class="section-marker" data-i18n="references_marker">Referanslar</div>
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl md:text-6xl font-bold mb-8" data-i18n="references_title">Uğurlu Hekayələrimiz</h2>
+            <p class="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto font-light leading-relaxed mb-20" data-i18n="references_desc">
+                Müştərilərimizin rəqəmsal transformasiya səyahətlərində necə dəyər yaratdığımızı kəşf edin.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 mb-16">
+                <!-- Azfin -->
+                <div class="reveal group h-full flex flex-col">
+                    <div class="rounded-3xl overflow-hidden glass border border-white/5 mb-8 flex-1 transition-all duration-500 group-hover:-translate-y-4 group-hover:border-accent-primary/30 group-hover:shadow-[0_40px_80px_rgba(99,102,241,0.15)] relative">
+                        <div class="aspect-video relative overflow-hidden bg-[#050505]">
+                            <div class="absolute inset-0 w-[300%] h-[300%] origin-top-left scale-[0.3333] pointer-events-none transition-all duration-700 grayscale-[0.8] group-hover:grayscale-0">
+                                <iframe src="https://azfin.az/" class="w-full h-full border-none"></iframe>
+                            </div>
+                            <a href="https://azfin.az/" target="_blank" class="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 backdrop-blur-sm">
+                                <span class="px-8 py-3 bg-white text-black rounded-full text-[10px] font-bold uppercase tracking-widest" data-i18n="reference_live_view">Live View</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="text-2xl font-bold mb-3" data-i18n="reference_azfin_title">Azfin Audit</h3>
+                        <p class="text-slate-500 text-sm font-light" data-i18n="reference_azfin_desc">Maliyyə auditi və konsaltinq platforması.</p>
+                    </div>
+                </div>
+
+                <!-- Forsaj -->
+                <div class="reveal group h-full flex flex-col">
+                    <div class="rounded-3xl overflow-hidden glass border border-white/5 mb-8 flex-1 transition-all duration-500 group-hover:-translate-y-4 group-hover:border-accent-primary/30 group-hover:shadow-[0_40px_80px_rgba(99,102,241,0.15)] relative">
+                        <div class="aspect-video relative overflow-hidden bg-[#050505]">
+                            <div class="absolute inset-0 w-[300%] h-[300%] origin-top-left scale-[0.3333] pointer-events-none transition-all duration-700 grayscale-[0.8] group-hover:grayscale-0">
+                                <iframe src="https://forsaj.octotech.az/" class="w-full h-full border-none"></iframe>
+                            </div>
+                            <a href="https://forsaj.octotech.az/" target="_blank" class="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 backdrop-blur-sm">
+                                <span class="px-8 py-3 bg-white text-black rounded-full text-[10px] font-bold uppercase tracking-widest" data-i18n="reference_live_view">Live View</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="text-2xl font-bold mb-3" data-i18n="reference_forsaj_title">Forsaj Club</h3>
+                        <p class="text-slate-500 text-sm font-light" data-i18n="reference_forsaj_desc">Ekstremal idman və off-road portalı.</p>
+                    </div>
+                </div>
+
+                <!-- Intersertservis -->
+                <div class="reveal group h-full flex flex-col">
+                    <div class="rounded-3xl overflow-hidden glass border border-white/5 mb-8 flex-1 transition-all duration-500 group-hover:-translate-y-4 group-hover:border-accent-primary/30 group-hover:shadow-[0_40px_80px_rgba(99,102,241,0.15)] relative">
+                        <div class="aspect-video relative overflow-hidden bg-[#050505]">
+                            <div class="absolute inset-0 w-[300%] h-[300%] origin-top-left scale-[0.3333] pointer-events-none transition-all duration-700 grayscale-[0.8] group-hover:grayscale-0">
+                                <iframe src="https://intersertservis.az/" class="w-full h-full border-none"></iframe>
+                            </div>
+                            <a href="https://intersertservis.az/" target="_blank" class="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 backdrop-blur-sm">
+                                <span class="px-8 py-3 bg-white text-black rounded-full text-[10px] font-bold uppercase tracking-widest" data-i18n="reference_live_view">Live View</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="text-2xl font-bold mb-3" data-i18n="reference_intersert_title">Intersertservis</h3>
+                        <p class="text-slate-500 text-sm font-light" data-i18n="reference_intersert_desc">Beynəlxalq sertifikatlaşdırma sistemi.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-center gap-16">
+                <!-- AuditTV -->
+                <div class="reveal group w-full md:w-[31%] flex flex-col">
+                    <div class="rounded-3xl overflow-hidden glass border border-white/5 mb-8 flex-1 transition-all duration-500 group-hover:-translate-y-4 group-hover:border-accent-primary/30 group-hover:shadow-[0_40px_80px_rgba(99,102,241,0.15)] relative">
+                        <div class="aspect-video relative overflow-hidden bg-[#050505]">
+                            <div class="absolute inset-0 w-[300%] h-[300%] origin-top-left scale-[0.3333] pointer-events-none transition-all duration-700 grayscale-[0.8] group-hover:grayscale-0">
+                                <iframe src="https://audittv.az/" class="w-full h-full border-none"></iframe>
+                            </div>
+                            <a href="https://audittv.az/" target="_blank" class="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 backdrop-blur-sm">
+                                <span class="px-8 py-3 bg-white text-black rounded-full text-[10px] font-bold uppercase tracking-widest" data-i18n="reference_live_view">Live View</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="text-2xl font-bold mb-3" data-i18n="reference_audittv_title">AuditTV</h3>
+                        <p class="text-slate-500 text-sm font-light" data-i18n="reference_audittv_desc">Maliyyə və audit platforması.</p>
+                    </div>
+                </div>
+
+                <!-- HubMsg -->
+                <div class="reveal group w-full md:w-[31%] flex flex-col">
+                    <div class="rounded-3xl overflow-hidden glass border border-white/5 mb-8 flex-1 transition-all duration-500 group-hover:-translate-y-4 group-hover:border-accent-primary/30 group-hover:shadow-[0_40px_80px_rgba(99,102,241,0.15)] relative">
+                        <div class="aspect-video relative overflow-hidden bg-[#050505]">
+                            <div class="absolute inset-0 w-[300%] h-[300%] origin-top-left scale-[0.3333] pointer-events-none transition-all duration-700 grayscale-[0.8] group-hover:grayscale-0">
+                                <iframe src="https://hubmsg.octotech.az/" class="w-full h-full border-none"></iframe>
+                            </div>
+                            <a href="https://hubmsg.octotech.az/" target="_blank" class="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 backdrop-blur-sm">
+                                <span class="px-8 py-3 bg-white text-black rounded-full text-[10px] font-bold uppercase tracking-widest" data-i18n="reference_live_view">Live View</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="text-2xl font-bold mb-3" data-i18n="reference_hubmsg_title">HubMsg</h3>
+                        <p class="text-slate-500 text-sm font-light" data-i18n="reference_hubmsg_desc">Genişmiqyaslı bildiriş mərkəzi.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row items-center justify-center gap-10 mt-20">
+                <button onclick="openContactModal()" class="btn-sketch" data-i18n="references_button_all">
+                    Bütün Referanslar
+                </button>
+                <button onclick="openContactModal()" class="text-sm uppercase tracking-widest text-slate-500 hover:text-white transition-colors border-b border-transparent hover:border-white pb-1" data-i18n="references_button_start">
+                    Layihənizi Başladın
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact" class="py-32 border-t border-white/5">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-20 mb-20">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="text-3xl font-bold tracking-tighter font-heading mb-8">
+                        OCTO<span class="text-accent-primary">TECH</span>
+                    </div>
+                    <h4 class="text-4xl font-bold mb-10 tracking-tight" data-i18n="footer_heading">Növbəti böyük layihənizi <br> birlikdə başladaq.</h4>
+                    <a href="mailto:agency@octotech.az" class="text-2xl font-light underline underline-offset-8 hover:text-accent-primary transition-colors">agency@octotech.az</a>
+                </div>
+                <div>
+                    <h5 class="text-xs uppercase tracking-[0.3em] font-bold mb-8 text-slate-500" data-i18n="footer_office_title">Ofis</h5>
+                    <p class="text-slate-400 font-light leading-relaxed" data-i18n="footer_office_address">
+                        Bakı, Azərbaycan <br> Port Baku Towers <br> <br>
+                        +994 (50) 000 00 00
+                    </p>
+                </div>
+                <div>
+                    <h5 class="text-xs uppercase tracking-[0.3em] font-bold mb-8 text-slate-500" data-i18n="footer_social_title">Bizi İzləyin</h5>
+                    <div class="flex flex-col gap-4">
+                        <a href="#" class="text-slate-400 hover:text-white transition-all flex items-center gap-3 group">
+                            <i data-lucide="linkedin" class="w-4 h-4 text-slate-600 group-hover:text-accent-primary transition-colors"></i>
+                            <span class="text-sm">LinkedIn</span>
+                        </a>
+                        <a href="#" class="text-slate-400 hover:text-white transition-all flex items-center gap-3 group">
+                            <i data-lucide="twitter" class="w-4 h-4 text-slate-600 group-hover:text-accent-primary transition-colors"></i>
+                            <span class="text-sm">Twitter</span>
+                        </a>
+                        <a href="#" class="text-slate-400 hover:text-white transition-all flex items-center gap-3 group">
+                            <i data-lucide="instagram" class="w-4 h-4 text-slate-600 group-hover:text-accent-primary transition-colors"></i>
+                            <span class="text-sm">Instagram</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+                <p class="text-xs text-slate-600" data-i18n="footer_copyright">© 2026 Octotech Solutions. Designed for the future.</p>
+                <div class="flex gap-8 text-[10px] uppercase tracking-widest text-slate-600">
+                    <a href="#services" class="hover:text-white transition-colors" data-i18n="nav_services">Xidmətlər</a>
+                    <a href="#ecosystem" class="hover:text-white transition-colors" data-i18n="nav_ecosystem">Ekosistem</a>
+                    <a href="#contact" class="hover:text-white transition-colors" data-i18n="nav_contact">Əlaqə</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Full Screen Contact Modal -->
+    <div id="contact-modal" class="fixed inset-0 z-[250] bg-black/90 backdrop-blur-3xl opacity-0 invisible transition-all duration-500 flex items-center justify-center p-6">
+        <div class="close-overlay" onclick="closeContactModal()">[ Bağla / Close ]</div>
+        <div class="container max-w-2xl bg-white/5 border border-white/10 rounded-[3rem] p-10 md:p-16 relative overflow-hidden">
+            <h2 class="text-4xl md:text-5xl font-bold mb-10 tracking-tighter" data-i18n="contact_modal_title">Layihənizi Başladın</h2>
+            <form id="contact-form" class="space-y-6">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-widest text-slate-500 mb-2" data-i18n="contact_form_name">Ad Soyad</label>
+                        <input type="text" name="name" required class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-accent-primary transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-widest text-slate-500 mb-2" data-i18n="contact_form_phone">Telefon</label>
+                        <input type="tel" name="phone" required class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-accent-primary transition-colors">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase tracking-widest text-slate-500 mb-2" data-i18n="contact_form_email">E-poçt</label>
+                    <input type="email" name="email" required class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-accent-primary transition-colors">
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase tracking-widest text-slate-500 mb-2" data-i18n="contact_form_message">Mesajınız</label>
+                    <textarea name="message" rows="4" required class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-accent-primary transition-colors"></textarea>
+                </div>
+                <button type="submit" class="w-full btn-sketch">
+                    <span data-i18n="contact_form_submit">Göndər</span>
+                </button>
+            </form>
+            <div id="form-feedback" class="mt-6 text-center text-sm font-medium opacity-0 transition-opacity"></div>
+        </div>
+    </div>
+
+    <!-- Full Screen Language Picker Overlay -->
+    <div id="language-overlay">
+        <div class="close-overlay" onclick="toggleLanguageMenu()">[ Bağla / Close ]</div>
+        <div class="container d-flex flex-column align-items-center">
+            <button onclick="changeLanguage('az')" class="language-tile border-0 text-decoration-none">
+                <img src="https://hatscripts.github.io/circle-flags/flags/az.svg" class="w-12 h-12 rounded-full">
+                <span class="name">AZERBAIJAN</span>
+            </button>
+            <button onclick="changeLanguage('tr')" class="language-tile border-0 text-decoration-none">
+                <img src="https://hatscripts.github.io/circle-flags/flags/tr.svg" class="w-12 h-12 rounded-full">
+                <span class="name">TÜRKÇE</span>
+            </button>
+            <button onclick="changeLanguage('en')" class="language-tile border-0 text-decoration-none">
+                <img src="https://hatscripts.github.io/circle-flags/flags/us.svg" class="w-12 h-12 rounded-full">
+                <span class="name">ENGLISH</span>
+            </button>
+            <button onclick="changeLanguage('ru')" class="language-tile border-0 text-decoration-none">
+                <img src="https://hatscripts.github.io/circle-flags/flags/ru.svg" class="w-12 h-12 rounded-full">
+                <span class="name">РУССКИЙ</span>
+            </button>
+        </div>
+    </div>
+
+    <script src="assets/js/translations.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
